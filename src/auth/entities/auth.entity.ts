@@ -7,12 +7,15 @@ import {
 } from "typeorm";
 
 @Entity()
-export class Task {
+export class Auth {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column()
-  name: string;
+  @Column({ nullable: false })
+  email: string;
+
+  @Column({ nullable: false })
+  password: string;
 
   @CreateDateColumn()
   createdAt: Date;
