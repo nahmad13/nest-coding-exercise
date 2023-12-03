@@ -6,14 +6,11 @@ import {
   MaxLength,
 } from "class-validator";
 
-export class CreateUserDto {
+export class LoginDTO {
   @IsEmail()
   @IsNotEmpty({ message: "Email field cannot be empty" })
   email: string;
 
-  @IsString()
-  @MinLength(4)
-  @MaxLength(20)
   @IsNotEmpty({ message: "Password field cannot be empty" })
   password: string;
 }
