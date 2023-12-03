@@ -11,7 +11,7 @@ export class Auth {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column({ nullable: false, unique: false })
+  @Column({ nullable: false, unique: true })
   email: string;
 
   @Column({ nullable: false })

@@ -11,7 +11,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async validateUser(email: string, pass: string): Promise<Partial<Auth>> {
     const user = await this.findOne(email);
     if (user && bcrypt.compare(user.password, await bcrypt.hash(pass, 10))) {
       const { password, ...result } = user;
@@ -19,8 +19,8 @@ export class AuthService {
     }
     return null;
   }
-  async findOne(email: string) {
-    return this.authRepository.findOne(email);
+  async findOne(email: string): Promise<Auth> {
+    return await this.authRepository.findOne(email);
   }
 
   async login(user: any) {
@@ -32,12 +32,10 @@ export class AuthService {
         updatedat: user.user.updatedat,
       },
     };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    return await this.jwtService.sign(payload);
   }
 
-  async register(data) {
+  async register(data): Promise<Partial<Auth>> {
     data.password = await bcrypt.hash(data.password, 10);
     const response = await this.authRepository.create(data);
     if (response) {
@@ -52,7 +50,9 @@ export class AuthService {
 
   async getProfile(user: Partial<Auth>) {
     const data = await this.authRepository.findOne(user.email);
-    delete data.password;
-    return { user: { ...data } };
+    if (data) {
+      const { password, ...result } = data;
+      return result;
+    }
   }
 }

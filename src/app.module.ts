@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { AuthInterceptor } from "./auth/auth.interceptor";
+import { TasksModule } from "./tasks/tasks.module";
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthInterceptor } from "./auth/auth.interceptor";
       inject: [ConfigService],
     }),
     AuthModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [

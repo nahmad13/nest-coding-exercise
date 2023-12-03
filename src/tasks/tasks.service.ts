@@ -1,26 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { Injectable } from "@nestjs/common";
+import { TasksRepository } from "./tasks.repository";
+import { Task } from "./entities/task.entity";
 
 @Injectable()
 export class TasksService {
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  constructor(private taskRepository: TasksRepository) {}
+  async create(data: Partial<Task>): Promise<void | (Partial<Task> & Task)> {
+    return await this.taskRepository.createTask(data);
   }
 
-  findAll() {
-    return `This action returns all tasks`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
-  }
-
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  findAll(): Promise<Task[]> {
+    return this.taskRepository.findAllTasks();
   }
 }

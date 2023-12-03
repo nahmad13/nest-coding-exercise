@@ -11,7 +11,7 @@ export class Task {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @CreateDateColumn()

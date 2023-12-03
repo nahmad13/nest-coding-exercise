@@ -12,6 +12,7 @@ import { JwtAuthGuard } from "./guards/jwt.guard";
 import { AuthService } from "./auth.service";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { LoginDTO } from "./dto/loginUser.dto";
+import { Auth } from "./entities/auth.entity";
 
 @Controller("users")
 export class AuthController {
@@ -19,19 +20,31 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post("login")
-  async login(@Request() req: Request, @Body() body: LoginDTO) {
-    return this.authService.login(req);
+  async login(
+    @Request() req: Request,
+    @Body() body: LoginDTO
+  ): Promise<{
+    jwt: string;
+  }> {
+    const data = await this.authService.login(req);
+    return { jwt: data };
   }
 
   @Post("register")
   @UseFilters()
-  async register(@Request() req: Request, @Body() body: CreateUserDto) {
-    return this.authService.register(body);
+  async register(
+    @Body() body: CreateUserDto
+  ): Promise<{ user: Partial<Auth> }> {
+    const data = await this.authService.register(body);
+    return { user: data };
   }
 
   @UseGuards(JwtAuthGuard)
   @Get("user")
-  getProfile(@Request() req) {
-    return this.authService.getProfile(req.user);
+  async getProfile(@Request() req): Promise<{
+    user: Partial<Auth>;
+  }> {
+    const data = await this.authService.getProfile(req.user);
+    return { user: data };
   }
 }

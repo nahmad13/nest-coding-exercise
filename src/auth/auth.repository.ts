@@ -10,13 +10,13 @@ export class AuthRepository {
   ) {}
 
   async findOne(email: string): Promise<Auth | null> {
-    return this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: {
         email,
       },
     });
   }
-  async create(data: any) {
+  async create(data: Partial<Auth>): Promise<void | (Partial<Auth> & Auth)> {
     return await this.userRepository
       .save(data)
       .then((res) => res)
